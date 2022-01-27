@@ -1,0 +1,14 @@
+---
+title: "Hannah Shafer's Bio381 Website"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Hannah's Bio381 website for posting homework assignments
+
+Link to [New Page](newpage.html)
+
+Link to [Homework 2](Homework_02.html)
