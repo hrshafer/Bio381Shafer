@@ -184,7 +184,7 @@ RESULT:
 First String,Second,1.22,3.4
 Second,More Text,1.555555,2.2220
 Third,x,3,124</code></pre>
-<p>I captured each instance of 2 or more spaces and replaced them with a comma.</p>
+<p>I captured each instance of 2 or more spaces and replaced each with a comma.</p>
 <ol start="2" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -198,7 +198,7 @@ RESULT:
 Bryan Ballif (University of Vermont)
 Aaron Ellison (Harvard Forest)
 Sydne Record (Bryn Mawr)</code></pre>
-<p>First I captured everything I wanted to keep: the last name with (+), space between names with (), first name with (+), and name of school with (.+). I also included the comma between names and comma/space between names and school, but did not capture them. Then I replaced the sequence with the \3 (first name), \2 (space) \1 (last name), and (\4) the school.</p>
+<p>First I captured everything I wanted to keep: the last name with <code>(\w+)</code>, space between names with <code>(\s)</code>, first name with <code>(\w+)</code>, and name of school with (.+). I also listed the comma between names and comma/space <code>,(\s)</code> between names and school, but did not capture them. Then I replaced the sequence with the <code>\3</code> (first name), <code>\2</code> (space) <code>\1</code> (last name), and <code>\4</code> (the school, with parentheses around it).</p>
 <ol start="3" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -213,7 +213,7 @@ RESULT:
 0002 Billy In The Lowground.mp3 
 0003 Cherokee Shuffle.mp3 
 0004 Walking Cane.mp3</code></pre>
-<p>I captured all instances of .mp3 and then included a space outside of the parentheses. Then I kept the .mp3 using \1 and inserted a line break in place of the space by using .</p>
+<p>I captured all instances of .mp3 and included a space outside of the parentheses above. Then I kept the .mp3 using <code>\1</code> and inserted a line break in place of the space by using <code>\n</code>.</p>
 <ol start="4" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -228,7 +228,7 @@ Georgia Horseshoe.mp3_0001
 Billy In The Lowground.mp3_0002
 Cherokee Shuffle.mp3_0003
 Walking Cane.mp3_0004</code></pre>
-<p>I captured the 4-digit number, typed a space (to avoid a space before each final file name), and then captured the rest of the text and .mp3 at the end. Then I simply re-ordered the components by placing the song name (\2) first, underscore, file number (\1(), and .mp3 (\3) at the end.</p>
+<p>I captured the 4-digit number, typed a space (to avoid a space before each final file name), and then captured the rest of the text with (.+) and (.mp3) at the end. Then I simply re-ordered the components by placing the song name <code>(\2)</code> first, underscore, then file number <code>(\1)</code>, and .mp3 <code>(\3)</code> at the end.</p>
 <ol start="5" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -243,7 +243,7 @@ C_pennsylvanicus,44
 C_herculeanus,3
 M_punctiventris,4
 L_neoniger,55</code></pre>
-<p>I captured the first letter of the genus name, included the rest of the genus name and comma, captured the whole species name, and then included the comma and first number, and then just captured the second comma and second number. Then I replaced this with just the first letter, underscore, species name, comma, and second number.</p>
+<p>I captured the first letter of the genus name with <code>(\w)</code>, included the rest of the genus name and comma with <code>\w+,</code>, captured the whole species name with <code>(\w+)</code>, and then included the comma and first number with <code>,\d+.\d</code>, and then captured the second comma and second number with <code>(,d\d+)</code>. Then I replaced this with just the first letter, underscore, species name, comma, and second number.</p>
 <ol start="6" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -258,7 +258,7 @@ C_penn,44
 C_herc,3
 M_punc,4
 L_neon,55</code></pre>
-<p>I used the same expression as in #5 except I only captured 4 letters of the species name and had to add an additional + to recognize the rest of the species name.</p>
+<p>I used the same expression as in #5 except I only captured 4 letters of the species name using the curly brackets, and had to add an additional <code>\w+</code> right after that to recognize the rest of the species name.</p>
 <ol start="7" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -273,7 +273,7 @@ Campen, 44, 10.2
 Camher, 3, 10.5
 Myrpun, 4, 12.2
 Lasneo, 55, 3.3</code></pre>
-<p>I captured the first three letters of the genus and species respectively (\1 and \2) and also captured the comma after those (\3). I included but did not capture the rest of the genus or species names. Then I captured the numbers and other comma, and re-ordered them to appear in the right order in the result.</p>
+<p>I captured the first three letters of the each genus and species, again using the curly brackets, and also captured the comma after those (,). I included but did not capture the rest of the genus and species names with two <code>\w+</code> wildcards after each capture with the curly brackets. Then I captured the numbers and other comma, and re-ordered them to appear in the right order in the result, listing <code>\6</code> first and <code>\5</code> second, which correspond to the second and first numbers respectively.</p>
 
 
 

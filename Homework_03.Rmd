@@ -18,7 +18,7 @@ First String,Second,1.22,3.4
 Second,More Text,1.555555,2.2220
 Third,x,3,124
 ```
-I captured each instance of 2 or more spaces and replaced them with a comma.
+I captured each instance of 2 or more spaces and replaced each with a comma.
 
 
 2.
@@ -34,7 +34,7 @@ Bryan Ballif (University of Vermont)
 Aaron Ellison (Harvard Forest)
 Sydne Record (Bryn Mawr)
 ```
-First I captured everything I wanted to keep: the last name with (\w+), space between names with (\s), first name with (\w+), and name of school with (.+). I also included the comma between names and comma/space between names and school, but did not capture them. Then I replaced the sequence with the \3 (first name), \2 (space) \1 (last name), and (\4) the school.
+First I captured everything I wanted to keep: the last name with ```(\w+)```, space between names with ```(\s)```, first name with ```(\w+)```, and name of school with (.+). I also listed the comma between names and comma/space ```,(\s)``` between names and school, but did not capture them. Then I replaced the sequence with the ```\3``` (first name), ```\2``` (space) ```\1``` (last name), and ```\4``` (the school, with parentheses around it).
 
 
 3.
@@ -51,7 +51,7 @@ RESULT:
 0003 Cherokee Shuffle.mp3 
 0004 Walking Cane.mp3
 ```
-I captured all instances of .mp3 and then included a space outside of the parentheses. Then I kept the .mp3 using \1 and inserted a line break in place of the space by using \n.
+I captured all instances of .mp3 and included a space outside of the parentheses above. Then I kept the .mp3 using ```\1``` and inserted a line break in place of the space by using ```\n```.
 
 
 4.
@@ -68,7 +68,7 @@ Billy In The Lowground.mp3_0002
 Cherokee Shuffle.mp3_0003
 Walking Cane.mp3_0004
 ```
-I captured the 4-digit number, typed a space (to avoid a space before each final file name), and then captured the rest of the text and .mp3 at the end. Then I simply re-ordered the components by placing the song name (\2) first, underscore, file number (\1(), and .mp3 (\3) at the end.
+I captured the 4-digit number, typed a space (to avoid a space before each final file name), and then captured the rest of the text with (.+) and (.mp3) at the end. Then I simply re-ordered the components by placing the song name ```(\2)``` first, underscore, then file number ```(\1)```, and .mp3 ```(\3)``` at the end.
 
 
 5.
@@ -85,7 +85,7 @@ C_herculeanus,3
 M_punctiventris,4
 L_neoniger,55
 ```
-I captured the first letter of the genus name, included the rest of the genus name and comma, captured the whole species name, and then included the comma and first number, and then just captured the second comma and second number. Then I replaced this with just the first letter, underscore, species name, comma, and second number.
+I captured the first letter of the genus name with ```(\w)```, included the rest of the genus name and comma with ```\w+,```, captured the whole species name with ```(\w+)```, and then included the comma and first number with ```,\d+.\d```, and then captured the second comma and second number with ```(,d\d+)```. Then I replaced this with just the first letter, underscore, species name, comma, and second number.
 
 
 6.
@@ -102,7 +102,7 @@ C_herc,3
 M_punc,4
 L_neon,55
 ```
-I used the same expression as in #5 except I only captured 4 letters of the species name and had to add an additional \w+ to recognize the rest of the species name.
+I used the same expression as in #5 except I only captured 4 letters of the species name using the curly brackets, and had to add an additional ```\w+``` right after that to recognize the rest of the species name.
 
 
 7.
@@ -119,4 +119,4 @@ Camher, 3, 10.5
 Myrpun, 4, 12.2
 Lasneo, 55, 3.3
 ```
-I captured the first three letters of the genus and species respectively (\1 and \2) and also captured the comma after those (\3). I included but did not capture the rest of the genus or species names. Then I captured the numbers and other comma, and re-ordered them to appear in the right order in the result.
+I captured the first three letters of the each genus and species, again using the curly brackets, and also captured the comma after those (,). I included but did not capture the rest of the genus and species names with two ```\w+``` wildcards after each capture with the curly brackets. Then I captured the numbers and other comma, and re-ordered them to appear in the right order in the result, listing ```\6``` first and ```\5``` second, which correspond to the second and first numbers respectively.
