@@ -172,7 +172,7 @@ pre code {
 
 
 <ol style="list-style-type: decimal">
-<li></li>
+<li>Assigned variables x, a, and b using <code>&lt;-</code>, and then assigned z values based on each given expression</li>
 </ol>
 <pre class="r"><code>x &lt;- 1.1
 a &lt;- 2.2
@@ -180,47 +180,45 @@ b &lt;- 3.3</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>3.61714</li>
 </ol>
-<pre class="r"><code>z &lt;- x^a^b
+<pre class="r"><code>z &lt;- x^(a^b)
 print(z) # [1] 3.61714</code></pre>
-<pre><code>## [1] 3.61714</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>1.997611</li>
 </ol>
 <pre class="r"><code>z &lt;- (x^a)^b
 print(z) # [1] 1.997611</code></pre>
-<pre><code>## [1] 1.997611</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>7.413</li>
 </ol>
 <pre class="r"><code>z &lt;- 3*x^3 + 2*x^2 + 1
 print(z) # [1] 7.413</code></pre>
-<pre><code>## [1] 7.413</code></pre>
-<p>2.a. (1 2 3 4 5 6 7 8 7 6 5 4 3 2 1)</p>
-<pre class="r"><code>a &lt;- seq(1:8)
-b &lt;- rep(7:1)
-c &lt;- c(a,b)
+<ol start="2" style="list-style-type: decimal">
+<li><ol style="list-style-type: lower-alpha">
+<li>(1 2 3 4 5 6 7 8 7 6 5 4 3 2 1)</li>
+</ol></li>
+</ol>
+<pre class="r"><code>a &lt;- seq(1:8) # assigned a sequence of 1-8 to vector a
+b &lt;- rep(7:1) # assigned a singly repeating patter of 7-1 descending to vector b
+c &lt;- c(a,b) # concatenated vectors a and b and assigned them to vector c, our desired output
 print(c)</code></pre>
-<pre><code>##  [1] 1 2 3 4 5 6 7 8 7 6 5 4 3 2 1</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>(1 2 2 3 3 3 4 4 4 4 5 5 5 5 5)</li>
 </ol>
-<pre class="r"><code>rep(1:5, c(1,2,3,4,5))</code></pre>
-<pre><code>##  [1] 1 2 2 3 3 3 4 4 4 4 5 5 5 5 5</code></pre>
+<pre class="r"><code>rep(1:5, c(1,2,3,4,5)) # repeated integers 1-5 respectively once, twice, thrice, four times, and five times</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>(5 4 4 3 3 3 2 2 2 2 1 1 1 1 1)</li>
 </ol>
-<pre class="r"><code>rep(5:1, c(1,2,3,4,5))</code></pre>
-<pre><code>##  [1] 5 4 4 3 3 3 2 2 2 2 1 1 1 1 1</code></pre>
+<pre class="r"><code>rep(5:1, c(1,2,3,4,5)) # repeated integers 5-1 descending, again respectively once, twice, thrice, four times, and five times</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>(1.094789, 0.7340976)</li>
 </ol>
-<pre class="r"><code>a &lt;- runif(2)
-x &lt;- a[1] # 0.813
-y &lt;- a[2] # 0.733
-r &lt;- sqrt(x^2 + y^2)
-print(r) # [1] 1.094789</code></pre>
-<pre><code>## [1] 0.7017113</code></pre>
-<pre class="r"><code>theta &lt;- atan(y/x) # [1] 0.7340976</code></pre>
+<pre class="r"><code>a &lt;- runif(2) # created a vector a with two random uniform numbers
+x &lt;- a[1] # 0.813 # designated the first random number as x
+y &lt;- a[2] # 0.733 # designated the second random number as y
+r &lt;- sqrt(x^2 + y^2) # assigned r the value of the line that would connect x and y
+print(r) # [1] 1.094789
+theta &lt;- atan(y/x) # [1] 0.7340976 # found theta using given formula for converting Cartesian to polar coordinates
+print(theta) # [1] 1.094789 # the polar coordinates are then (theta, r)</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li></li>
 </ol>
@@ -232,15 +230,12 @@ queue &lt;- queue[-5] # serpent leaves line
 queue &lt;- queue[-3] # owl leaves line
 queue &lt;- append(queue, &quot;aphid&quot;, after = 2) # aphid gets in line before ant
 print(queue) #[1] &quot;donkey&quot; &quot;fox&quot;    &quot;aphid&quot;  &quot;ant&quot; ; aphid is third in line</code></pre>
-<pre><code>## [1] &quot;donkey&quot; &quot;fox&quot;    &quot;aphid&quot;  &quot;ant&quot;</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li></li>
 </ol>
-<pre class="r"><code>x &lt;- (1:100) # create vector with integers 1-100
+<pre class="r"><code>x &lt;- (1:100) # created a vector x with integers 1-100
 x &lt;- which(x%%2 &amp; x%%3 &amp; x%%7 != 0) # redefine vector excluding values that are not (!= 0) divisible by (%%) 2, 3, and (&amp;) 7
-print(x)</code></pre>
-<pre><code>##  [1]  1  5 11 13 17 19 23 25 29 31 37 41 43 47 53 55 59 61 65 67 71 73 79 83 85
-## [26] 89 95 97</code></pre>
+print(x) # (1, 5, 11, 13, 17, 19, 23, 25, 29, 31, 37, 41, 43, 47, 53, 55, 59, 61, 65, 67, 71, 73, 79, 83, 85, 89, 95, 97)</code></pre>
 
 
 

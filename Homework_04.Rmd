@@ -5,56 +5,61 @@ date: "2/9/2022"
 output: html_document
 ---
 
-1.
-```{r} 
+1. Assigned variables x, a, and b using ```<-```, and then assigned z values based on each given expression
+```{r, eval=FALSE} 
 x <- 1.1
 a <- 2.2
 b <- 3.3
 ```
+
 a. 3.61714
-```{r}
-z <- x^a^b
+```{r, eval=FALSE}
+z <- x^(a^b)
 print(z) # [1] 3.61714
 ```
+
 b. 1.997611
-```{r}
+```{r, eval=FALSE}
 z <- (x^a)^b
 print(z) # [1] 1.997611
 ```
+
 c. 7.413
-```{r}
+```{r, eval=FALSE}
 z <- 3*x^3 + 2*x^2 + 1
 print(z) # [1] 7.413
 ```
 
-2.a. (1 2 3 4 5 6 7 8 7 6 5 4 3 2 1)
-```{r}
-a <- seq(1:8)
-b <- rep(7:1)
-c <- c(a,b)
+
+2. a. (1 2 3 4 5 6 7 8 7 6 5 4 3 2 1)
+```{r, eval=FALSE}
+a <- seq(1:8) # assigned a sequence of 1-8 to vector a
+b <- rep(7:1) # assigned a singly repeating patter of 7-1 descending to vector b
+c <- c(a,b) # concatenated vectors a and b and assigned them to vector c, our desired output
 print(c)
 ```
 b. (1 2 2 3 3 3 4 4 4 4 5 5 5 5 5)
-```{r}
-rep(1:5, c(1,2,3,4,5))
+```{r, eval=FALSE}
+rep(1:5, c(1,2,3,4,5)) # repeated integers 1-5 respectively once, twice, thrice, four times, and five times
 ```
 c. (5 4 4 3 3 3 2 2 2 2 1 1 1 1 1)
-```{r}
-rep(5:1, c(1,2,3,4,5))
+```{r, eval=FALSE}
+rep(5:1, c(1,2,3,4,5)) # repeated integers 5-1 descending, again respectively once, twice, thrice, four times, and five times
 ```
 
 3. (1.094789, 0.7340976)
-```{r}
-a <- runif(2)
-x <- a[1] # 0.813
-y <- a[2] # 0.733
-r <- sqrt(x^2 + y^2)
+```{r, eval=FALSE}
+a <- runif(2) # created a vector a with two random uniform numbers
+x <- a[1] # 0.813 # designated the first random number as x
+y <- a[2] # 0.733 # designated the second random number as y
+r <- sqrt(x^2 + y^2) # assigned r the value of the line that would connect x and y
 print(r) # [1] 1.094789
-theta <- atan(y/x) # [1] 0.7340976
+theta <- atan(y/x) # [1] 0.7340976 # found theta using given formula for converting Cartesian to polar coordinates
+print(theta) # [1] 1.094789 # the polar coordinates are then (theta, r)
 ```
 
 4.
-```{r}
+```{r, eval=FALSE}
 queue <- c("sheep", "fox", "owl", "ant") # starting lineup
 queue <- append(queue, "serpent") # serpent gets in line
 queue <- queue[-1] # sheep leaves line
@@ -66,8 +71,8 @@ print(queue) #[1] "donkey" "fox"    "aphid"  "ant" ; aphid is third in line
 ```
 
 5.
-```{r}
-x <- (1:100) # create vector with integers 1-100
+```{r, eval=FALSE}
+x <- (1:100) # created a vector x with integers 1-100
 x <- which(x%%2 & x%%3 & x%%7 != 0) # redefine vector excluding values that are not (!= 0) divisible by (%%) 2, 3, and (&) 7
-print(x)
+print(x) # (1, 5, 11, 13, 17, 19, 23, 25, 29, 31, 37, 41, 43, 47, 53, 55, 59, 61, 65, 67, 71, 73, 79, 83, 85, 89, 95, 97)
 ```
