@@ -1,0 +1,245 @@
+---
+title: "Homework 6"
+author: "Hannah Shafer"
+date: "2/23/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+1. Running the sample code
+
+Open libraries
+```{r}
+library(ggplot2) # for graphics
+library(MASS) # for maximum likelihood estimation
+```
+
+Read in data vector and generate fake data
+```{r}
+# quick and dirty, a truncated normal distribution to work on the solution set
+
+z <- rnorm(n=3000,mean=0.2)
+z <- data.frame(1:3000,z)
+names(z) <- list("ID","myVar")
+z <- z[z$myVar>0,]
+str(z)
+# data.frame':	1725 obs. of  2 variables:
+#  $ ID   : int  8 10 11 13 16 17 19 22 24 29 ...
+#  $ myVar: num  0.276 0.878 1.04 0.431 2.484
+summary(z$myVar)
+#     Min.  1st Qu.   Median     Mean  3rd Qu. 
+# 0.000904 0.348635 0.760045 0.877109 1.270632 
+#     Max. 
+# 4.085390
+```
+
+Plot a histogram of the data
+```{r}
+p1 <- ggplot(data=z, aes(x=myVar, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2, bins=200)
+print(p1) # prints out histogram
+```
+
+Add an empirical density curve
+```{r}
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1) # prints histogram from before but with a dotted density curve
+```
+
+Get maximum likelihood parameters for ```normal```
+```{r}
+normPars <- fitdistr(z$myVar,"normal") # fit normal distribution to the data
+print(normPars)
+ #      mean          sd    
+ #  0.87710945   0.63904730 
+ # (0.01538645) (0.01087986)
+str(normPars)
+# List of 5
+#  $ estimate: Named num [1:2] 0.877 0.639
+#   ..- attr(*, "names")= chr [1:2] "mean" "sd"
+#  $ sd      : Named num [1:2] 0.0154 0.0109
+#   ..- attr(*, "names")= chr [1:2] "mean" "sd"
+#  $ vcov    : num [1:2, 1:2] 0.000237 0 0 0.000118
+#   ..- attr(*, "dimnames")=List of 2
+#   .. ..$ : chr [1:2] "mean" "sd"
+#   .. ..$ : chr [1:2] "mean" "sd"
+#  $ n       : int 1725
+#  $ loglik  : num -1675
+#  - attr(*, "class")= chr "fitdistr"
+normPars$estimate["mean"] # note structure of getting a named attribute
+#      mean 
+# 0.8771095 
+```
+
+Plot the ```normal``` probability density; involves calling the ```dnorm``` function inside ggplot's ```stat_function```
+```stat_function``` in help system- "draws a function as a continuous curve" - this would allow us to add a smooth function to any ggplot
+```{r}
+meanML <- normPars$estimate["mean"]
+sdML <- normPars$estimate["sd"]
+
+xval <- seq(0,max(z$myVar),len=length(z$myVar))
+
+stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$myVar), args = list(mean = meanML, sd = sdML))
+
+p1 + stat # prints the histogram with empirical density curve from before, but adds the normal density curve (note biased mean)
+```
+
+Plot ```exponential``` probability density
+```{r}
+expoPars <- fitdistr(z$myVar,"exponential")
+rateML <- expoPars$estimate["rate"]
+
+stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$myVar), args = list(rate=rateML))
+
+p1 + stat + stat2 # exponential curve added to plot
+```
+
+Plot ```uniform``` probability density
+```{r}
+stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$myVar), args = list(min=min(z$myVar), max=max(z$myVar)))
+ p1 + stat + stat2 + stat3
+```
+
+Plot ```gamma``` probability density
+```{r}
+gammaPars <- fitdistr(z$myVar,"gamma")
+shapeML <- gammaPars$estimate["shape"]
+rateML <- gammaPars$estimate["rate"]
+
+stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$myVar), args = list(shape=shapeML, rate=rateML))
+ p1 + stat + stat2 + stat3 + stat4
+```
+
+Plot ```beta``` probability density
+```{r}
+pSpecial <- ggplot(data=z, aes(x=myVar/(max(myVar + 0.1)), y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
+  xlim(c(0,1)) +
+  geom_density(size=0.75,linetype="dotted")
+
+betaPars <- fitdistr(x=z$myVar/max(z$myVar + 0.1),start=list(shape1=1,shape2=2),"beta")
+shape1ML <- betaPars$estimate["shape1"]
+shape2ML <- betaPars$estimate["shape2"]
+
+statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$myVar), args = list(shape1=shape1ML,shape2=shape2ML))
+pSpecial + statSpecial
+```
+
+2. Import data and run the analysis above on it; data imported and truncated from: https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.vdncjsxrx
+```{r}
+z <- read.table("../Bio381/MyDataFile.csv",header=TRUE,sep=",")
+names(z) <- list("ID","pop", "myVar")
+z <- z[z$myVar>0,]
+str(z)
+summary(z$myVar)
+str(z)
+summary(z)
+```
+
+3. Run the above code on the imported data rather than the "fake data"
+```{r}
+p1 <- ggplot(data=z, aes(x=myVar, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2)
+print(p1) # plot a histogram of the data
+
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1) #  add empirical density curve; black dotted line
+
+normPars <- fitdistr(z$myVar,"normal")
+print(normPars)
+str(normPars)
+normPars$estimate["mean"] # get maximum likelihood parameters for normal density
+
+meanML <- normPars$estimate["mean"]
+sdML <- normPars$estimate["sd"]
+
+xval <- seq(0,max(z$myVar),len=length(z$myVar))
+
+ stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$myVar), args = list(mean = meanML, sd = sdML))
+ p1 + stat # plot normal probability density; red line
+ 
+ expoPars <- fitdistr(z$myVar,"exponential")
+rateML <- expoPars$estimate["rate"]
+
+stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$myVar), args = list(rate=rateML))
+ p1 + stat + stat2 # plot exponential probability density; blue line
+ 
+ stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$myVar), args = list(min=min(z$myVar), max=max(z$myVar)))
+ p1 + stat + stat2 + stat3 # plot uniform probability density; green line
+ 
+ gammaPars <- fitdistr(z$myVar,"gamma")
+shapeML <- gammaPars$estimate["shape"]
+rateML <- gammaPars$estimate["rate"]
+
+stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$myVar), args = list(shape=shapeML, rate=rateML))
+ p1 + stat + stat2 + stat3 + stat4 # plot gamma probability density; brown line
+```
+```{r}
+pSpecial <- ggplot(data=z, aes(x=myVar/(max(myVar + 0.1)), y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
+  xlim(c(0,1)) +
+  geom_density(size=0.75,linetype="dotted")
+
+betaPars <- fitdistr(x=z$myVar/max(z$myVar + 0.1),start=list(shape1=1,shape2=2),"beta")
+shape1ML <- betaPars$estimate["shape1"]
+shape2ML <- betaPars$estimate["shape2"]
+
+statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$myVar), args = list(shape1=shape1ML,shape2=shape2ML))
+pSpecial + statSpecial # plot beta probability density
+```
+The best fitting probability density curve for this set of data is either the normal or gamma - the lines are nearly overlapping, so I think they fit equally well. These two curves matched the high peak of the data. However, neither line is a true match because the data appears to be bimodal, and neither the normal nor gamma curves have more than one peak. This dataset had multiple columns of data, so the above analysis was performed on just the first column. Below I tried another column to see if it fit a normal, uniform, exponential, or gamma distribution rather than bimodal.
+
+```{r}
+z <- read.table("../Bio381/MyDataFile2.csv",header=TRUE,sep=",")
+names(z) <- list("ID","pop", "myVar")
+z <- z[z$myVar>0,]
+str(z)
+summary(z$myVar)
+str(z)
+summary(z)
+
+p1 <- ggplot(data=z, aes(x=myVar, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2)
+print(p1) # plot a histogram of the data
+
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1) #  add empirical density curve; black dotted line
+
+normPars <- fitdistr(z$myVar,"normal")
+print(normPars)
+str(normPars)
+normPars$estimate["mean"] # get maximum likelihood parameters for normal density
+
+meanML <- normPars$estimate["mean"]
+sdML <- normPars$estimate["sd"]
+
+xval <- seq(0,max(z$myVar),len=length(z$myVar))
+
+ stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$myVar), args = list(mean = meanML, sd = sdML))
+ p1 + stat # plot normal probability density; red line
+ 
+ expoPars <- fitdistr(z$myVar,"exponential")
+rateML <- expoPars$estimate["rate"]
+
+stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$myVar), args = list(rate=rateML))
+ p1 + stat + stat2 # plot exponential probability density; blue line
+ 
+ stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$myVar), args = list(min=min(z$myVar), max=max(z$myVar)))
+ p1 + stat + stat2 + stat3 # plot uniform probability density; green line
+ 
+ gammaPars <- fitdistr(z$myVar,"gamma")
+shapeML <- gammaPars$estimate["shape"]
+rateML <- gammaPars$estimate["rate"]
+
+stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$myVar), args = list(shape=shapeML, rate=rateML))
+ p1 + stat + stat2 + stat3 + stat4 # plot gamma probability density; brown line
+```
+The second column of data was less obviously bimodal, and fit either a normal or gamma curve - the two curves were again nearly identical.
+
+4. Simulating a new data set using the gamma distributions and the above data's maximum likelihood parameters.
+```{r}
+z <- read.table("../Bio381/MyDataFile2.csv",header=TRUE,sep=",")
+
+
+```

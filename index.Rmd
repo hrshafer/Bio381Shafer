@@ -1,13 +1,11 @@
 ---
-title: "Hannah Shafer's Bio381 Website"
+title: "Hannah Shafer’s Bio381 Website"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-Hannah's Bio381 website for posting homework assignments
+Hannah’s Bio381 website for posting homework assignments
 
 Link to [New Page](newpage.html)
 
@@ -18,3 +16,7 @@ Link to [Homework 3](Homework_03.html)
 Link to [Homework 4](Homework_04.html)
 
 Link to [Homework 5](Homework_05.html)
+
+Link to Homework 6
+
+Link to [Homework 7](Homework_07.html)
