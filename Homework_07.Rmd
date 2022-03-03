@@ -6,7 +6,7 @@ output: html_document
 ---
 #HW 7 draft
 
-1. Examine iris data set:
+1: examine iris data set:
 ```{r}
 print(iris)
 summary(iris)
@@ -57,11 +57,11 @@ print(iris5)
 ```{r}
 iris6 <- iris4 %>%
   group_by(Species) %>%
-  summarize(meanSepalLength=mean(Sepal.Length), meanSepalWidge=mean(Sepal.Width), number=n())
+  summarize(meanSepalLength=mean(Sepal.Length), meanSepalWidth=mean(Sepal.Width), number=n())
 print(iris6)
 ```
 
-8: use the pipe tool to get iris6 from iris1 with just output
+8: use the pipe tool to get iris6 from iris1 with just one output
 ```{r}
 filter(iris, Species %in% c("versicolor","virginica"), Sepal.Length > 6, Sepal.Width > 2.5) %>%
   select(Sepal.Length, Sepal.Width, Species) %>%
@@ -73,7 +73,6 @@ filter(iris, Species %in% c("versicolor","virginica"), Sepal.Length > 6, Sepal.W
 
 9: longer data frame using iris but with three columns, Species, Measure, and Value
 ```{r}
-glimpse(iris)
 iris %>%
   pivot_longer(cols=Sepal.Length:Petal.Width,
                names_to = "Measure",
