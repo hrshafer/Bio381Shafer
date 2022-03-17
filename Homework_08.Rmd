@@ -1,0 +1,81 @@
+---
+title: "Homework 8"
+author: "Hannah Shafer"
+date: "3/16/2022"
+output: html_document
+---
+
+1. In my lab, we are researching devernalization responses in grasses. We hypothesized that grasses that are devernalization-responsive will have delayed flowering time after an interrupted vernalization period (in which they become devernalized). We have a control group of vernalized plants and a group that undergoes devernalization via hot temperatures.
+
+
+2. For this exercise, I will focus on two treatment groups (control and hot), and look at 60 individuals of the same species in each group. Based on previous literature (https://link.springer.com/article/10.1007/s12155-009-9069-3), I'll assign a predicted mean of 50 days to flowering for the control group, and a mean of 65 days to flowering for the hot group (~2 weeks later since the vernalization will be interrupted for 2 weeks). The standard deviation will be set at 5 days based on personal observations, and each treatment group will have 60 individuals to mirror my ongoing experiment.
+
+
+3. Creating a data frame with random values generated based on the above parameters:
+```{r setup, include=FALSE}
+# first couple variables, predetermined
+ID <- 1:120
+Treatment <- rep(c("Control","Hot"),each=60)
+
+# generate the random, normal counts for the two groups
+control <- round(rnorm(n=60, mean=50, sd=5))
+hot <- round(rnorm(n=60, mean=65, sd=5))
+
+# response variable for data frame:
+DaysToFlower <- c(control, hot)
+
+# make the data frame itself
+d_frame <- data.frame(ID, Treatment, DaysToFlower)
+```
+
+
+4. Analyzing the data and generating a useful graph; I will use a t-test because my x variable is categorical (control vs. hot) and my y variable is continuous (# of days):
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# t-test
+t.test(control,hot)
+#p-val is less than 2.2e-16, so there is a significant difference between the flowering time of the vernalized plants and devernalized plants
+
+# graphing
+
+# distribution of days to flowering for control
+hist(control)
+
+# distribution of days to flowering for hot
+hist(hot)
+
+# histogram showing counts for days to flowering for both hot and cold (can see the bimodal pattern better)
+graph <- d_frame %>%
+  ggplot(aes(x=DaysToFlower, fill=Treatment)) +
+    geom_histogram() +
+  scale_fill_manual(values=c("blue", "red"))
+print(graph)
+```
+
+
+5. Running the above analysis a few more times to get a feel for the results with the same parameters but given different random counts: From this exercise, I saw variation in the counts themselves, and the graphs had varying degrees of bimodality based on treatment group. However, the p-values for the t-tests remained significant (and even had the same value), and I continued to see a clear separation between the treatment groups.
+
+
+6. Adjusting means: seeing what the smallest difference between means can be to still get a significant difference between treatment groups. Here, I simply adjusted the mean of the control group, increasing by 1 until I reached the point of no significant difference.
+```{r}
+control_adjusted <- round(rnorm(n=60, mean=61, sd=5))
+hot_adjusted <- round(rnorm(n=60, mean=65, sd=5))
+DaysToFlower_adjusted <- c(control_adjusted, hot_adjusted)
+d_frame_adjusted <- data.frame(ID, Treatment, DaysToFlower)
+t.test(control_adjusted,hot_adjusted)
+````
+After running the above script a few times, I found that a difference of 4 (means of 61 and 65) consistently yielded a significant p-value. A difference of 3 (means of 62 and 65) often yielded a significant p-value, but occasionally yielded a p-value higher than 0.05.
+
+
+7. Adjusting sample sizes: seeing what the minimum sample size is to still see a significant effect with the original means. Here I decreased the sample size in increments for both treatment groups equally.
+```{r}
+control_adjusted <- round(rnorm(n=3, mean=50, sd=5))
+hot_adjusted <- round(rnorm(n=3, mean=65, sd=5))
+DaysToFlower_adjusted <- c(control_adjusted, hot_adjusted)
+d_frame_adjusted <- data.frame(ID, Treatment, DaysToFlower)
+t.test(control_adjusted,hot_adjusted)
+
+````
+After running the above script a few times, I found that a sample size of 5 for each treatment group consistently yielded a significant p-value, and a sample size of 4 for each treatment group yielded a significant p-value 9 out of every 10 runs.
