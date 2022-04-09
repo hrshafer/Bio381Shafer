@@ -1,0 +1,109 @@
+---
+title: "Homework 9"
+author: "Hannah Shafer"
+date: "3/23/2022"
+output: html_document
+---
+
+1. Re-organize code from Homework 8 to follow structured programming principles:
+```{r}
+# Description -------------------------------
+# Script used to simulate data I may expect to collect based on my research hypothesis and previous work conducted in my field.
+# 23 March 2022
+# HRS
+```
+```{r}
+# Initialize --------------------------------
+library(ggplot2)
+library(dplyr)
+```
+```{r}
+# Load Functions ----------------------------
+####################################
+# FUNCTION: d_frame
+# purpose: create simulated data frame
+# input: sample ID sequence, treatments, and days to flowering
+# output: data frame of simulated data
+#---------------------------------------------
+d_frame <- function(ID = 1:120,
+                   Treatment = rep(c("Control","Hot"),each=60),
+                   DaysToFlower = c(control, hot)) {
+  data_frame <- data.frame(ID, Treatment, DaysToFlower)
+  return(data_frame)
+}
+
+####################################
+# FUNCTION: p_val
+# purpose: calculate p-value for t-test ran on simulated data
+# input: x & y, the two treatment groups
+# output: p-value for t-test
+#--------------------------------------------
+p_val <- function(x = control,
+                  y = hot) {
+  p_value <- t.test(x,y)$p.value
+  return(p_value)
+}
+
+####################################
+# FUNCTION: graph
+# purpose: graph simulated data
+# input: data frame of simulated data
+# output: histogram of simulated data colored by treatment group
+#--------------------------------------------
+graph <- function() {
+  histogram <- data %>%
+  ggplot(aes(x=DaysToFlower, fill=Treatment)) +
+    geom_histogram() +
+  scale_fill_manual(values=c("blue", "red"))
+  return(histogram)
+}
+```
+```{r}
+# Set Global Variables ----------------------
+control <- round(rnorm(n=60, mean=50, sd=5))
+hot <- round(rnorm(n=60, mean=65, sd=5))
+```
+```{r}
+#Program Body -------------------------------
+data <- d_frame()
+p_val()
+graph()
+```
+
+2. Modify above code to record a new summary variable. Copy a function above, rename it, and modify it. Here, modify p-val() function to record another summary statistic, the treatment group means. Then add bars to the graph() output to indicate means on the histogram.
+```{r}
+####################################
+# FUNCTION: summary
+# purpose: calculate summary statistics (p-value and group means) for t-test ran on simulated data
+# input: x & y, the two treatment groups
+# output: p-value for t-test and group means
+#--------------------------------------------
+summary <- function(x = control,
+                  y = hot) {
+  p_value <- t.test(x,y)$p.value
+  means <- c(mean(control), mean(hot))
+  return(list(p_value, means))
+}
+
+####################################
+# FUNCTION: graph
+# purpose: graph simulated data, add a bar for each group mean
+# input: data frame of simulated data
+# output: histogram of simulated data colored by treatment group and with means indicated
+#--------------------------------------------
+graph <- function() {
+  histogram <- data %>%
+  ggplot(aes(x=DaysToFlower, fill=Treatment)) +
+    geom_histogram() +
+  scale_fill_manual(values=c("blue", "red")) +
+    geom_vline(aes(xintercept=mean(control)), col="blue") +
+    geom_vline(aes(xintercept=mean(hot)), col="red")
+  return(histogram)
+}
+```
+```{r}
+# Running the updated code:
+data <- d_frame()
+summary()
+graph()
+```

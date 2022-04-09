@@ -1,0 +1,103 @@
+---
+title: "Homework 10"
+author: "Hannah Shafer"
+date: "3/30/2022"
+output: html_document
+---
+
+1. For loop within a function to find number of zeros in numeric vector
+```{r}
+####################################
+# FUNCTION: zeros
+# purpose: calculate the number of zeroes in a numeric vector
+# input: x = numeric vector
+# output: counter = number of 0s in vector
+#----------------------------------
+counter <- 0
+vector <- c(0,1,2,3,0,4,5,6,0)
+
+zeros <- function(x=vector) {
+  for(i in seq_along(x)) {
+    if (x[i] == 0) counter <- counter+1
+  }
+  return(counter)
+}
+zeros(vector)
+```
+
+2. Do 1 but with subsetting instead of function/loop
+```{r}
+count <- length(vector[vector==0])
+print(count)
+```
+
+3. Function for matrix creation
+```{r}
+####################################
+# FUNCTION: my_matrix
+# purpose: create matrix populated with products of (row number) * (column number)
+# input: i= rows; j= columns
+# output: matrix
+#----------------------------------
+my_matrix <- function(i=10,
+                      j=10) {
+  mat <- matrix(nrow=i,ncol=j)
+  for(i in 1:nrow(mat)) {
+    for(j in 1:ncol(mat)) {
+      mat[i,j] <- (i*j)
+    }
+  }
+  return(mat)
+}
+my_matrix()
+```
+
+4.a. Simulate 3 groups of data with different means, place all data into a data frame
+```{r}
+group1 <- round(rnorm(n=10, mean=100, sd=5))
+group2 <- round(rnorm(n=10, mean=200, sd=5))
+group3 <- round(rnorm(n=10, mean=300, sd=5))
+group <- rep(c("group1","group2", "group3"),each=10)
+response <- c(group1,group2,group3)
+d_frame <- data.frame(group, response)
+print(d_frame)
+```
+
+4.b. Custom function to shuffle response variables and recalculate group means
+```{r}
+library(dplyr)
+####################################
+# FUNCTION: shuffle
+# purpose: shuffle response variables, calculate new means
+# input: data frame
+# output: shuffled data frame & vector of means
+#----------------------------------
+shuffle_data <- function(z=d_frame) {
+  z[,2] <- sample(z[,2])
+  means <- mean(z$group_by(group))
+  return(z)
+  return(means)
+}
+
+# use dplyr
+shuffled <- shuffle_data(d_frame)
+print(shuffled)
+
+
+
+
+print(means)
+```
+
+4.c. Repeat function in b 100 times and store new results in dataframe
+```{r}
+# for (i in 1:100) {
+#   shuffle(d_frame)
+# }
+```
+
+4.d. Create histogram to reflect data in c
+```{r}
+
+```
+
