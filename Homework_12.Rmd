@@ -1,0 +1,77 @@
+---
+title: "Homework 12"
+author: "Hannah Shafer"
+date: "4/13/2022"
+output: html_document
+---
+
+ggplot practice:
+
+Load libraries
+```{r}
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+```
+
+Set up data and initial ggplot graph
+```{r}
+data <- PlantGrowth
+print(data)
+p1 <- ggplot(data=data, aes(x=group,y=weight)) + geom_boxplot()
+print(p1)
+```
+
+Themes
+```{r}
+p1 + theme_bw() # grid lines, not too dark
+p1 + theme_classic() # no grid lines and white background
+p1 + theme_linedraw() # black frame
+p1 + theme_dark() # good for brightly colored points
+p1 + theme_base() # mimics graphs created using base R, good for working with others who are using base R
+p1 + theme_par() # again, matches current par settings in base
+p1 + theme_void() # shows data only, good for overlaying on a figure or something
+p1 + theme_solarized() # good for web pages
+p1 + theme_economist() # many specialized themes
+p1 + theme_grey() # ggplot default theme if you're trying to get back to original
+```
+
+Base sizes
+```{r}
+p1 + theme_classic(base_size=10)
+p1 + theme_classic(base_size=20)
+p1 + theme_classic(base_size=30)
+p1 + theme_classic(base_size=40)
+```
+
+Aesthetics/mapping
+```{r}
+p1 <- ggplot(data=data, aes(x=group,y=weight)) + aes(fill=I("goldenrod"),col=I("black")) + geom_boxplot()
+p1
+p2 <- ggplot(data=data, aes(x=group,y=weight)) + aes(fill=I("coral"),col=I("black")) + geom_boxplot()
+p2
+p3 <- ggplot(data=data, aes(x=group,y=weight)) + aes(fill=I("blue"),col=I("black")) + geom_boxplot()
+p3
+p1 <- ggplot(data=data, aes(x=group,y=weight))
+p1 + geom_boxplot(aes(fill = factor(group)))
+```
+
+Faceting
+```{r}
+p1 + facet_grid(cols=vars(group)) + geom_boxplot()
+```
+
+Exporting to pdf
+```{r}
+ggsave(plot=p1, filename="MyPlot",width=5,height=3,units="in",device="pdf")
+```
+
+Going farther: labels, annotations, lines/arrows, custom colors
+```{r}
+p1 <- ggplot(data=data, aes(x=group,y=weight)) +
+  theme_linedraw() +
+  geom_boxplot(aes(fill = factor(group))) + 
+  theme(legend.position="none") +
+  labs(title="Effect of Treatment on Plant Height", x = "Group", y="Weight", caption="Data source: R")
+p1
+```

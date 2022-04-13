@@ -73,20 +73,18 @@ library(dplyr)
 # output: shuffled data frame & vector of means
 #----------------------------------
 shuffle_data <- function(z=d_frame) {
-  z[,2] <- sample(z[,2])
-  means <- mean(z$group_by(group))
-  return(z)
-  return(means)
+  shuffled <- data.frame(group,sample(z$response))
+  means <- c(mean(z[,z$response == "group1"]),mean(z[,z$response == "group2"]),mean(z[,z$response == "group3"]))
+  return(list(z,means))
 }
 
 # use dplyr
-shuffled <- shuffle_data(d_frame)
-print(shuffled)
+#shuffled <- shuffle_data(d_frame)
 
+shuffle_data()
 
+# c(mean(z[,z$response == "group1"]),mean(z[,z$response == "group2"]),mean(z[,z$response == "group3"]))
 
-
-print(means)
 ```
 
 4.c. Repeat function in b 100 times and store new results in dataframe

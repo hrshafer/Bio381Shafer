@@ -1,0 +1,9 @@
+# Summary stats for batch processing of regression models
+# timestamp: 2022-04-12 12:18:32
+# HRS
+# ------------------------
+
+"ID","file_name","slope","p_val","r2"
+1,"sample_data.csv",NA,NA,NA
+"ID","file_name","slope","p_val","r2"
+1,"sample_data.csv",NA,NA,NA

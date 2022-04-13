@@ -5,6 +5,76 @@ date: "4/6/2022"
 output: html_document
 ---
 
+Batch processing: repeat lecture materials but with a real data set
 ```{r}
+# (Note: skip file_builder function step since using a real data set)
 
+####################################
+# FUNCTION: reg_stats
+# purpose: fits linear model, extracts statistics
+# input: 2-column data frame (x and y)
+# output: slope, p-value, and r2
+#----------------------------------
+reg_stats <- function(d=NULL) {
+  if(is.null(d)) {
+    x_var <- runif(10)
+    y_var <- runif(10)
+    d <- data.frame(x_var,y_var)
+  }
+  . <- lm(data=d,d[,2]~d[,1])
+  . <- summary(.)
+  stats_list <- list(slope=.$coefficients[2,1],
+                     p_val=.$coefficients[2,4],
+                     r2=.$r.squared)
+  return(stats_list)
+  
+}
+# Body of script for batch processing of regression models
+
+# Global variables
+file_folder <- "/Users/hannahshafer/Desktop/sample_data.csv"
+n_files <- 1
+file_out <- "sample_data.csv"
+
+# Create data frame to hold file summary statistics
+ID <- seq_along("/Users/hannahshafer/Desktop/sample_data.csv")
+file_name <- sample_data.csv
+slope <- rep(NA,n_files)
+p_val <- rep(NA,n_files)
+r2 <- rep(NA,n_files)
+
+stats_out <- data.frame(ID, file_name, slope, p_val, r2)
+
+# batch process by looping through individual files and reading them in
+
+for (i in seq_along(file_name)) {
+  data <- read.table(file=paste(file_folder, file_name[i],sep=""),
+                     sep=",",
+                     header=TRUE) # read in next data dile
+  d_clean <- data[complete.cases(data),] # get clean cases
+  . <- reg_stats(d_clean) # pull out regression stats from clean file
+  stats_out[i,3:5] <- unlist(.) # unlist, copy into last 3 columns
+}
+
+
+# set up output file and incorporate time stamp and minimal metadata
+write.table(cat("# Summary stats for ",
+                "batch processing of regression models","\n",
+                "# timestamp: ",as.character(Sys.time()),"\n",
+                "# HRS","\n",
+                "# ------------------------", "\n",
+                "\n",
+                file=file_out,
+                row.names="",
+                col.names="",
+                sep=""))
+
+# now add the data frame
+new <- write.table(x=stats_out,
+            file=file_out,
+            row.names=FALSE,
+            col.names=TRUE,
+            sep=",",
+            append=TRUE)
+print(new)
 ```
