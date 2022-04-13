@@ -73,29 +73,31 @@ library(dplyr)
 # output: shuffled data frame & vector of means
 #----------------------------------
 shuffle_data <- function(z=d_frame) {
-  shuffled <- data.frame(group,sample(z$response))
-  means <- c(mean(z[,z$response == "group1"]),mean(z[,z$response == "group2"]),mean(z[,z$response == "group3"]))
-  return(list(z,means))
+  shuffled <- data.frame(group=z$group,respose=sample(z$response))
+  means <- c(mean(shuffled[shuffled$group == "group1",2]),mean(shuffled[shuffled$group == "group2",2]),mean(shuffled[shuffled$group == "group3",2]))
+  return(list(shuffled,means))
 }
-
-# use dplyr
-#shuffled <- shuffle_data(d_frame)
-
 shuffle_data()
-
-# c(mean(z[,z$response == "group1"]),mean(z[,z$response == "group2"]),mean(z[,z$response == "group3"]))
-
 ```
 
-4.c. Repeat function in b 100 times and store new results in dataframe
+4.c. Repeat function in 4.b. 100 times and store new results in dataframe
 ```{r}
-# for (i in 1:100) {
-#   shuffle(d_frame)
-# }
+d.frame <- data.frame(iter=NA, mean1=NA, mean2=NA, mean3=NA)
+for (i in 1:100) {
+  shuffled <- shuffle_data(d_frame)
+  unlist(shuffled[[2]])
+  d.frame[i,] <- c(i, shuffled[[2]][1], shuffled[[2]][2], shuffled[[2]][3])
+}
+print(d.frame)
 ```
 
-4.d. Create histogram to reflect data in c
+4.d. Create histograms to reflect data in c
 ```{r}
+library(ggplot2)
+qplot(x=d.frame$mean1,color=I("black"),fill=I("goldenrod"))
+qplot(x=d.frame$mean2,color=I("black"),fill=I("goldenrod"))
+qplot(x=d.frame$mean3,color=I("black"),fill=I("goldenrod"))
 
+# Comparison to original means: from the graphs we can see that the new means are all centered around 200. This is same as the mean of group2, but far off from the mean of group1 (100) and the mean of group3 (300). This makes sense that it would center on the average of all the groups combined (mean of group1 + group2 + group3 = 200) - albeit with a larger average standard deviation - since all the responses were randomly shuffled.
 ```
 

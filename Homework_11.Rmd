@@ -6,7 +6,7 @@ output: html_document
 ---
 
 Batch processing: repeat lecture materials but with a real data set
-```{r}
+```{r, echo=FALSE}
 # (Note: skip file_builder function step since using a real data set)
 
 ####################################
@@ -38,7 +38,7 @@ file_out <- "sample_data.csv"
 
 # Create data frame to hold file summary statistics
 ID <- seq_along("/Users/hannahshafer/Desktop/sample_data.csv")
-file_name <- sample_data.csv
+file_name <- "sample_data.csv"
 slope <- rep(NA,n_files)
 p_val <- rep(NA,n_files)
 r2 <- rep(NA,n_files)
@@ -48,7 +48,7 @@ stats_out <- data.frame(ID, file_name, slope, p_val, r2)
 # batch process by looping through individual files and reading them in
 
 for (i in seq_along(file_name)) {
-  data <- read.table(file=paste(file_folder, file_name[i],sep=""),
+  data <- read.table(file=paste(file_name[i],sep=""),
                      sep=",",
                      header=TRUE) # read in next data dile
   d_clean <- data[complete.cases(data),] # get clean cases
