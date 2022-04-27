@@ -1,0 +1,10 @@
+INFO [2022-04-27 10:18:35] 
+TRACE [2022-04-27 10:18:35] 
+DEBUG [2022-04-27 10:18:35] 
+DEBUG [2022-04-27 10:18:35] running file #1
+DEBUG [2022-04-27 10:18:35] running file #2
+DEBUG [2022-04-27 10:18:35] running file #3
+DEBUG [2022-04-27 10:18:35] running file #4
+DEBUG [2022-04-27 10:18:35] running file #5
+INFO [2022-04-27 10:18:35] read input
+INFO [2022-04-27 10:18:35] source functions
